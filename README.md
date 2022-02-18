@@ -1,2 +1,2 @@
 # eao-project-tracker
-Environment Assessment Office Project Tracker 2
+Environment Assessment Office Project Tracker
