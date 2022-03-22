@@ -33,8 +33,8 @@ jobs:
       - name: Watch new rollout (trigger by image change in Openshift)
         shell: bash
         run: |
-          oc rollout status dc/forms-flow-analytics-adhoc-worker -n ${{ secrets.OPENSHIFT4_DEV_REPO }} -w
-          oc rollout status dc/forms-flow-analytics-scheduled-worker -n ${{ secrets.OPENSHIFT4_DEV_REPO }} -w
-          oc rollout status dc/forms-flow-analytics-scheduler -n ${{ secrets.OPENSHIFT4_DEV_REPO }} -w
-          oc rollout status dc/forms-flow-analytics-server -n ${{ secrets.OPENSHIFT4_DEV_REPO }} -w
-          oc rollout status dc/forms-flow-analytics-worker -n ${{ secrets.OPENSHIFT4_DEV_REPO }} -w
+          oc rollout status dc/forms-flow-analytics-adhoc-worker -n ${{ secrets.OPENSHIFT4_DEV_REPO }}
+          oc rollout status dc/forms-flow-analytics-scheduled-worker -n ${{ secrets.OPENSHIFT4_DEV_REPO }}
+          oc rollout status dc/forms-flow-analytics-scheduler -n ${{ secrets.OPENSHIFT4_DEV_REPO }}
+          oc rollout status dc/forms-flow-analytics-server -n ${{ secrets.OPENSHIFT4_DEV_REPO }}
+          oc rollout status dc/forms-flow-analytics-worker -n ${{ secrets.OPENSHIFT4_DEV_REPO }}
