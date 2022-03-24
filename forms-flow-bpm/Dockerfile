@@ -8,15 +8,15 @@ WORKDIR /tmp/
 ARG FORMS_FLOW_REPO=https://github.com/aot-technologies/forms-flow-ai
 ARG FORMS_FLOW_VERSION=v4.0.5-alpha
 
-RUN git clone -b ${FORMS_FLOW_VERSION} ${FORMS_FLOW_REPO}
+RUN git clone -b ${FORMS_FLOW_VERSION} ${FORMS_FLOW_REPO} /bpm/
 
-COPY /tmp/forms-flow-ai/forms-flow-bpm/pom-docker.xml /tmp/pom.xml
-COPY /tmp/forms-flow-ai/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
+COPY /bpm/forms-flow-bpm/pom-docker.xml /tmp/pom.xml
+COPY /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
 
 
 # This allows Docker to cache most of the maven dependencies
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
-RUN cp -r /tmp/forms-flow-bpm/src/ /tmp/src/
+RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
 
 
