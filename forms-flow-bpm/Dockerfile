@@ -18,7 +18,7 @@ WORKDIR /tmp/
 # This allows Docker to cache most of the maven dependencies
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml dependency:resolve-plugins dependency:resolve dependency:go-offline -B
 RUN cp -r /bpm/forms-flow-bpm/src/ /tmp/src/
-RUN cp ./src/  /tmp/src/
+RUN cp -r ./src/ /tmp/src/
 
 
 RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
