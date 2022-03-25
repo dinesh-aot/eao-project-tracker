@@ -40,4 +40,4 @@ COPY --from=MAVEN_TOOL_CHAIN /tmp/target/forms-flow-bpm.jar ./app
 RUN chmod a+rwx -R /app
 WORKDIR /app
 VOLUME /tmp
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app/forms-flow-bpm.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-Dspring.profiles.active=custom", "-jar","/app/forms-flow-bpm.jar"]
