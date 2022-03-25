@@ -3,7 +3,6 @@
 FROM maven:3.6.1-jdk-11-slim AS MAVEN_TOOL_CHAIN
 RUN apt-get update \
     && apt-get install -y git
-WORKDIR /tmp/
 
 ARG FORMS_FLOW_REPO=https://github.com/aot-technologies/forms-flow-ai
 ARG FORMS_FLOW_VERSION=v4.0.5-alpha
@@ -12,6 +11,8 @@ RUN git clone -b ${FORMS_FLOW_VERSION} ${FORMS_FLOW_REPO} /bpm/
 
 COPY /bpm/forms-flow-bpm/pom-docker.xml /tmp/pom.xml
 COPY /bpm/forms-flow-bpm/settings-docker.xml /usr/share/maven/ref/
+
+WORKDIR /tmp/
 
 
 # This allows Docker to cache most of the maven dependencies
