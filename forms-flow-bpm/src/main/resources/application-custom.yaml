@@ -1,3 +1,0 @@
-report:
-  # url: ${REPORT_API_URL}
-  url: "https://eao-reports.apps.devops.aot-technologies.com/api/v1"
