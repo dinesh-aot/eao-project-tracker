@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Named;
 import java.io.IOException;
@@ -44,6 +45,9 @@ public class SyncFormDataPipelineListener extends BaseListener implements TaskLi
 
     @Autowired
     private WebClient webClient;
+
+    @Value("${report.url}")
+    private String reportUrl;
 
     @Override
     public void notify(DelegateExecution execution) {
@@ -155,7 +159,7 @@ public class SyncFormDataPipelineListener extends BaseListener implements TaskLi
      * @return
      */
     private String getSyncApplicationUrl() {
-        return httpServiceInvoker.getProperties().getProperty("report.url") + "/sync-form-data";
+        return this.reportUrl + "/sync-form-data";
     }
 
 }
