@@ -1,3 +1,2 @@
-report.url: "https://eao-reports.apps.devops.aot-technologies.com/api/v1"
-# url: ${REPORT_API_URL}
+report.url: ${REPORT_API_URL:}
 formsflow.ai.camunda.spring.webclient.connectionTimeout: ${BPM_CLIENT_CONN_TIMEOUT:5000}
