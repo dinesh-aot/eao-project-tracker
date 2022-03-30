@@ -21,9 +21,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Named;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -92,27 +92,43 @@ public class SyncFormDataPipelineListener extends BaseListener implements TaskLi
      * @param execution
      * @return
      */
-    private List<FormElement> getModifiedCustomFormElements(DelegateExecution execution) throws IOException {
-        List<FormElement> elements = new ArrayList<>();
-        List<String> keys = new ArrayList<>();
-        JsonNode data = new ObjectMapper().readTree(invokeSyncApplicationService(execution));
-        Iterator<String> iterator = data.fieldNames();
-        iterator.forEachRemaining(e -> keys.add(e));
-        for (String entry : keys) {
-            JsonNode jsonData = data.get(entry);
-            if (jsonData != null && jsonData.isArray()) {
-                for (int i = 0; i < jsonData.size(); i++) {
-                    JsonNode elementValue = jsonData.get(i).get("id");
-                    elements.add(new FormElement(entry + "/" + i + "/id", String.valueOf(elementValue)));
-                }
-            } else {
-                JsonNode elementValue = jsonData.get("id");
-                elements.add(new FormElement(entry + "/id", String.valueOf(elementValue)));
-            }
-        }
-        LOGGER.info("Patch Elements : " + elements);
-        return elements;
-    }
+    private Set<FormElement> getModifiedCustomFormElements(DelegateExecution execution) throws IOException {
+		Set<FormElement> elements = new LinkedHashSet<>();
+		JsonNode data = new ObjectMapper().readTree(invokeSyncApplicationService(execution));
+		Iterator<String> iterator = data.fieldNames();
+		iterator.forEachRemaining(entry -> {
+			JsonNode jsonData = data.get(entry);
+			if (jsonData != null && jsonData.isArray()) {
+				for (int i = 0; i < jsonData.size(); i++) {
+					JsonNode elementValue = jsonData.get(i).get("id");
+					elements.add(new FormElement(entry + "/" + i + "/id", String.valueOf(elementValue)));
+
+					readInnerDataElements(i, jsonData, elements, entry);
+				}
+			} else {
+				JsonNode elementValue = jsonData.get("id");
+				elements.add(new FormElement(entry + "/id", String.valueOf(elementValue)));
+			}
+		});
+		LOGGER.info("Patch Elements : " + elements);
+		return elements;
+	}
+
+	private void readInnerDataElements(int i, JsonNode jsonData, Set<FormElement> elements, String entry) {
+		Iterator<String> iterateData = jsonData.get(i).fieldNames();
+		iterateData.forEachRemaining(innerEntry -> {
+			JsonNode nestedData = jsonData.get(i).get(innerEntry);
+			if (nestedData != null && nestedData.isArray()) {
+				for (int j = 0; j < nestedData.size(); j++) {
+					if (nestedData.get(j).has("id")) {
+						JsonNode innerElementValue = nestedData.get(j).get("id");
+						elements.add(new FormElement(entry + "/" + i + "/" + innerEntry + "/" + j + "/" + "id",
+								String.valueOf(innerElementValue)));
+					}
+				}
+			}
+		});
+	}
 
     /**
      * This method invokes Sync API and returns the response.
